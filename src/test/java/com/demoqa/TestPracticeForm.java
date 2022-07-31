@@ -3,7 +3,6 @@ package com.demoqa;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Keys;
 
 import java.io.File;
 
@@ -12,25 +11,21 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class TestPracticeForm {
-
     @BeforeAll
     static void configure() {
         Configuration.baseUrl = "https://demoqa.com";
         Configuration.browserSize = "1920x1080";
         Configuration.browser = "chrome";
     }
-
     @Test
     void fillFormTest() {
         open("/automation-practice-form");
 
         $("#firstName").setValue("John");
         $("#lastName").setValue("Silver");
-
         $("#userEmail").setValue("JohnSilver@gmaiil.con");
         $("[for=gender-radio-1]").click();
         $("#userNumber").setValue("9933789987");
-
         $("#dateOfBirthInput").click();
         $(".react-datepicker__month-select").click();
         $(".react-datepicker__month-select").selectOption("May");
@@ -41,7 +36,6 @@ public class TestPracticeForm {
         $("[for=hobbies-checkbox-2]").click();
         $("#uploadPicture").uploadFile(new File("src/test/resources/cat.jpeg"));
         $("#currentAddress").setValue("Lenina st.");
-
         $("#state .css-1wa3eu0-placeholder").click();
         $("#react-select-3-option-1").click();
         $("#city .css-1wa3eu0-placeholder").click();
@@ -59,7 +53,5 @@ public class TestPracticeForm {
         $(".table-responsive").shouldHave(text("cat.jpeg"));
         $(".table-responsive").shouldHave(text("Lenina st."));
         $(".table-responsive").shouldHave(text("Uttar Pradesh Lucknow"));
-
-
     }
 }
