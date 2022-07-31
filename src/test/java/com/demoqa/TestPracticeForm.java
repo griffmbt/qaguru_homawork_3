@@ -36,17 +36,10 @@ public class TestPracticeForm {
         $(".react-datepicker__month-select").selectOption("May");
         $(".react-datepicker__year-select").click();
         $(".react-datepicker__year-select").selectOption("1993");
-
         $("[aria-label=\"Choose Sunday, May 30th, 1993\"]").shouldHave(text("30")).click();
-
-        $("#subjectsInput").setValue("English");
-        $("#subjectsInput").sendKeys(Keys.DOWN);
-        $("#subjectsInput").sendKeys(Keys.ENTER);
-
+        $("#subjectsInput").setValue("English").pressEnter();
         $("[for=hobbies-checkbox-2]").click();
-
         $("#uploadPicture").uploadFile(new File("src/test/resources/cat.jpeg"));
-
         $("#currentAddress").setValue("Lenina st.");
 
         $("#state .css-1wa3eu0-placeholder").click();
