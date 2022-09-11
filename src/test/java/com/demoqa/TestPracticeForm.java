@@ -6,9 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
+import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.*;
 
 public class TestPracticeForm {
     @BeforeAll
@@ -20,38 +21,45 @@ public class TestPracticeForm {
     @Test
     void fillFormTest() {
         open("/automation-practice-form");
+        $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
+        executeJavaScript("$('footer').remove()");
+        executeJavaScript("$('#fixedban').remove()");
 
         $("#firstName").setValue("John");
         $("#lastName").setValue("Silver");
         $("#userEmail").setValue("JohnSilver@gmaiil.con");
-        $("[for=gender-radio-1]").click();
+        $("#genderWrapper").$(byText("Other")).click();
         $("#userNumber").setValue("9933789987");
         $("#dateOfBirthInput").click();
-        $(".react-datepicker__month-select").click();
-        $(".react-datepicker__month-select").selectOption("May");
-        $(".react-datepicker__year-select").click();
-        $(".react-datepicker__year-select").selectOption("1993");
-        $("[aria-label=\"Choose Sunday, May 30th, 1993\"]").shouldHave(text("30")).click();
-        $("#subjectsInput").setValue("English").pressEnter();
-        $("[for=hobbies-checkbox-2]").click();
+
+        $(".react-datepicker__month-select").selectOption("July");
+        $(".react-datepicker__year-select").selectOption("2008");
+        $(".react-datepicker__day--30:not(.react-datepicker__day--outside-month)").click();
+
+        $("#subjectsInput").setValue("Math").pressEnter();
+        $("#hobbiesWrapper").$(byText("Sports")).click();
+
         $("#uploadPicture").uploadFile(new File("src/test/resources/cat.jpeg"));
-        $("#currentAddress").setValue("Lenina st.");
-        $("#state .css-1wa3eu0-placeholder").click();
-        $("#react-select-3-option-1").click();
-        $("#city .css-1wa3eu0-placeholder").click();
-        $("#react-select-4-option-1").click();
+        $("#currentAddress").setValue("Some address 1");
+        $("#state").click();
+        $("#stateCity-wrapper").$(byText("NCR")).click();
+        $("#city").click();
+        $("#stateCity-wrapper").$(byText("Delhi")).click();
         $("#submit").click();
 
+        $(".modal-dialog").should(appear);
+
         $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
-        $(".table-responsive").shouldHave(text("John Silver"));
-        $(".table-responsive").shouldHave(text("JohnSilver@gmaiil.con"));
-        $(".table-responsive").shouldHave(text("Male"));
-        $(".table-responsive").shouldHave(text("9933789987"));
-        $(".table-responsive").shouldHave(text("30 May,1993"));
-        $(".table-responsive").shouldHave(text("English"));
-        $(".table-responsive").shouldHave(text("Reading"));
-        $(".table-responsive").shouldHave(text("cat.jpeg"));
-        $(".table-responsive").shouldHave(text("Lenina st."));
-        $(".table-responsive").shouldHave(text("Uttar Pradesh Lucknow"));
+        $(".table-responsive").shouldHave(text("John Silver"),
+                text("JohnSilver@gmaiil.con"),
+                text("Other"),
+                text("9933789987"),
+                text("30 July,2008"),
+                text("Math"),
+                text("Sports"),
+                text("cat.jpeg"),
+                text("Some address 1"),
+                text("Delhi"));
+
     }
 }
