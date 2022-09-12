@@ -28,13 +28,13 @@ public class TestPracticeForm {
         $("#firstName").setValue("John");
         $("#lastName").setValue("Silver");
         $("#userEmail").setValue("JohnSilver@gmaiil.con");
-        $("#genderWrapper").$(byText("Other")).click();
+        $("#genterWrapper").$(byText("Other")).click();
         $("#userNumber").setValue("9933789987");
         $("#dateOfBirthInput").click();
 
         $(".react-datepicker__month-select").selectOption("July");
         $(".react-datepicker__year-select").selectOption("2008");
-        $(".react-datepicker__day--30:not(.react-datepicker__day--outside-month)").click();
+        $(".react-datepicker__day--030:not(.react-datepicker__day--outside-month)").click();
 
         $("#subjectsInput").setValue("Math").pressEnter();
         $("#hobbiesWrapper").$(byText("Sports")).click();
