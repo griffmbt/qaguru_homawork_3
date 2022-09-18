@@ -1,49 +1,80 @@
 package com.demoqa.tests;
 
-import com.codeborne.selenide.Configuration;
 import com.demoqa.pages.RegistrationFormPage;
-import org.junit.jupiter.api.BeforeAll;
+
+import com.github.javafaker.Faker;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Locale;
 
-public class RegistrationFormWithPageObjectsTests {
+import static com.demoqa.tests.TestData.*;
+import static com.demoqa.utils.RandomUtils.*;
+import static java.lang.String.format;
+
+public class RegistrationFormWithPageObjectsTests extends TestBase {
     RegistrationFormPage registrationFormPage = new RegistrationFormPage();
+    Faker faker = new Faker(new Locale("en"));
 
-    @BeforeAll
-    static void configure() {
-        Configuration.baseUrl = "https://demoqa.com";
-        Configuration.browserSize = "1920x1080";
-        Configuration.browser = "chrome";
+    String firstName,
+            lastName,
+            userFullName,
+            userEmail,
+            gender,
+            userNumber,
+            day,
+            month,
+            year,
+            userDateOfBirth,
+            hobby,
+            currentAddress,
+            userStateAndCity;
+
+    @BeforeEach
+    void prepareTestData() {
+        firstName = faker.name().firstName();
+        lastName = faker.name().lastName();
+        userFullName = format("%s %s", firstName, lastName);
+        userEmail = faker.internet().emailAddress();
+        gender = getRandomGender();
+        userNumber = faker.phoneNumber().subscriberNumber(10);
+        day = faker.number().numberBetween(1, 30) + "";
+        month = getRandomMonth();
+        year = faker.number().numberBetween(1900, 2010) + "";
+        userDateOfBirth = format("%s %s,%s", day, month, year);
+        hobby = getRandomHobby();
+        currentAddress = faker.address().fullAddress();
+        userStateAndCity = format("%s %s", userState, userCity);
     }
 
     @Test
     void fillFormTest() {
         registrationFormPage
                 .openPage()
-                .setFirstName("John")
-                .setLastName("Silver")
-                .setEmail("JohnSilver@gmaiil.con")
-                .setGender("Other")
-                .setUserNumber("9933789987")
-                .setBirthDate("30", "July", "2008")
-                .setSubjects("Math")
-                .setHobbies("Sports")
-                .uploadPicture("src/test/resources/cat.jpeg")
-                .setCurrentAddress("Some address 1")
-                .setStateAndCityComponent("NCR", "Delhi")
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setEmail(userEmail)
+                .setGender(gender)
+                .setUserNumber(userNumber)
+                .setBirthDate(day, month, year)
+                .setSubjects(subjects)
+                .setHobbies(hobby)
+                .uploadPicture(uploadPictureSrc)
+                .setCurrentAddress(currentAddress)
+                .setStateAndCityComponent(userState, userCity)
                 .clickSubmit()
 
                 .checkResultsTableVisible()
-                .checkResult("Student Name", "John Silver")
-                .checkResult("Student Email", "JohnSilver@gmaiil.con")
-                .checkResult("Date of Birth", "30 July,2008")
-                .checkResult("Gender", "Other")
-                .checkResult("Mobile", "9933789987")
-                .checkResult("Subjects", "English")
-                .checkResult("Hobbies", "Sports")
-                .checkResult("Picture", "cat.jpeg")
-                .checkResult("Address", "Some address 1")
-                .checkResult("State and City", "NCR Delhi");
+                .checkResult("Student Name", userFullName)
+                .checkResult("Student Email", userEmail)
+                .checkResult("Date of Birth", userDateOfBirth)
+                .checkResult("Gender", gender)
+                .checkResult("Mobile", userNumber)
+                .checkResult("Subjects", subjects)
+                .checkResult("Hobbies", hobby)
+                .checkResult("Picture", pictureName)
+                .checkResult("Address", currentAddress)
+                .checkResult("State and City", userStateAndCity);
 
     }
 }
