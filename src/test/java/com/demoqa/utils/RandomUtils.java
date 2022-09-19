@@ -7,9 +7,7 @@ public class RandomUtils {
 
     public static String getRandomMonth() {
         String month = "";
-        int min = 0;
-        int max = 11;
-        int num = faker.number().numberBetween(min, max);
+        int num = faker.number().numberBetween(0, 11);
         switch (num) {
 
             case 0:
